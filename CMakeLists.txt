@@ -13,9 +13,9 @@ endif()
 find_package(protoc CONFIG)
 find_package(protobuf CONFIG)
 find_package(gRPC CONFIG REQUIRED)
-include(grpc_helper.cmake)
 
 include_directories(${CMAKE_BINARY_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/grpc)
 
 get_filename_component(hw_proto "reflection.proto" ABSOLUTE)
 get_filename_component(hw_proto_path "${hw_proto}" PATH)
@@ -36,6 +36,7 @@ add_custom_command(
   DEPENDS "${hw_proto}")
 
 add_executable(beast2grpc   ${CMAKE_SOURCE_DIR}/main.cc
+                            ${CMAKE_SOURCE_DIR}/grpc/call_rpc.cc
                             ${hw_proto_srcs}
                             ${hw_grpc_srcs}
                             ${CMAKE_SOURCE_DIR}/proto_reflection_descriptor_database.cc
