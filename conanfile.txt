@@ -1,8 +1,10 @@
 [requires]
+zlib/1.2.11
 spdlog/1.4.2@bincrafters/stable
 protoc_installer/3.9.1@bincrafters/stable
 protobuf/3.9.1@bincrafters/stable
 grpc/1.25.0@inexorgame/stable
+boost/1.71.0@conan/stable
 
 [generators]
 cmake
