@@ -17,7 +17,7 @@ find_package(gRPC CONFIG REQUIRED)
 include_directories(${CMAKE_BINARY_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/grpc)
 
-get_filename_component(hw_proto "reflection.proto" ABSOLUTE)
+get_filename_component(hw_proto "grpc/reflection.proto" ABSOLUTE)
 get_filename_component(hw_proto_path "${hw_proto}" PATH)
 
 set(hw_proto_srcs "${CMAKE_BINARY_DIR}/reflection.pb.cc")
@@ -37,8 +37,7 @@ add_custom_command(
 
 add_executable(beast2grpc   ${CMAKE_SOURCE_DIR}/main.cc
                             ${CMAKE_SOURCE_DIR}/grpc/call_rpc.cc
+                            ${CMAKE_SOURCE_DIR}/grpc/proto_reflection_descriptor_database.cc
                             ${hw_proto_srcs}
-                            ${hw_grpc_srcs}
-                            ${CMAKE_SOURCE_DIR}/proto_reflection_descriptor_database.cc
-                            ${CMAKE_SOURCE_DIR}/reflection.proto)
-target_link_libraries(beast2grpc "CONAN_PKG::spdlog" "CONAN_PKG::protobuf" "CONAN_PKG::grpc")
+                            ${hw_grpc_srcs})
+target_link_libraries(beast2grpc CONAN_PKG::spdlog CONAN_PKG::protobuf CONAN_PKG::grpc)
