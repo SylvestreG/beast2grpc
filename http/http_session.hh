@@ -7,6 +7,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
+#include "grpc_wrapper.hh"
 
 namespace net = boost::asio;
 using tcp = net::ip::tcp;
@@ -20,6 +21,7 @@ private:
   tcp::socket _sock;
   beast::flat_buffer _buffer;
   http::request<http::string_body> _req;
+  grpc_wrapper& _wrap;
 
   void _on_read(error_code& ec, std::size_t bytes);
   void _fail(error_code const& ec, std::string const&err);
@@ -29,7 +31,7 @@ public:
   http_session(http_session const&) = delete;
   http_session& operator=(http_session const&) = delete;
 
-  http_session(tcp::socket socket);
+  http_session(tcp::socket socket, grpc_wrapper& wrap);
   void run();
 };
 

@@ -1,7 +1,7 @@
 project(beast2grpc CXX)
 cmake_minimum_required(VERSION 3.14)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 
 if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
@@ -39,6 +39,8 @@ add_executable(beast2grpc   ${CMAKE_SOURCE_DIR}/main.cc
                             ${CMAKE_SOURCE_DIR}/http/http_listener.cc
                             ${CMAKE_SOURCE_DIR}/http/http_session.cc
                             ${CMAKE_SOURCE_DIR}/grpc/call_rpc.cc
+                            ${CMAKE_SOURCE_DIR}/grpc/grpc_fn.cc
+                            ${CMAKE_SOURCE_DIR}/grpc/grpc_service.cc
                             ${CMAKE_SOURCE_DIR}/grpc/grpc_wrapper.cc
                             ${CMAKE_SOURCE_DIR}/grpc/proto_reflection_descriptor_database.cc
                             ${hw_proto_srcs}

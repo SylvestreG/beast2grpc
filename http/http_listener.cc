@@ -7,8 +7,8 @@
 #include <spdlog/fmt/ostr.h>
 #include "http_session.hh"
 
-http_listener::http_listener(net::io_context &io, tcp::endpoint edp)
-    : _ioc(io), _ep(edp), _acc(_ioc, _ep), _sock(_ioc) {
+http_listener::http_listener(net::io_context &io, tcp::endpoint edp, grpc_wrapper& wrapper)
+    : _ioc(io), _ep(edp), _acc(_ioc, _ep), _sock(_ioc), _wrap(wrapper) {
 
 }
 
@@ -26,7 +26,7 @@ void http_listener::_on_accept(error_code const &ec) {
     spdlog::info("accepted connection from {0}:{1}",
                  _sock.remote_endpoint().address(),
                  _sock.remote_endpoint().port());
-    std::make_shared<http_session>(std::move(_sock))->run();
+    std::make_shared<http_session>(std::move(_sock), _wrap)->run();
   }
 
   _acc.async_accept(_sock, [self = shared_from_this()](error_code ec) {
