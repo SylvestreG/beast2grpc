@@ -39,6 +39,7 @@ add_executable(beast2grpc   ${CMAKE_SOURCE_DIR}/main.cc
                             ${CMAKE_SOURCE_DIR}/http/http_listener.cc
                             ${CMAKE_SOURCE_DIR}/http/http_session.cc
                             ${CMAKE_SOURCE_DIR}/grpc/call_rpc.cc
+                            ${CMAKE_SOURCE_DIR}/grpc/grpc_wrapper.cc
                             ${CMAKE_SOURCE_DIR}/grpc/proto_reflection_descriptor_database.cc
                             ${hw_proto_srcs}
                             ${hw_grpc_srcs})
