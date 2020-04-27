@@ -14,6 +14,7 @@ compiler:
 script:
         - if [ "$TRAVIS_OS_NAME" == "windows" ]; then choco install python        ; fi
         - if [ "$TRAVIS_OS_NAME" == "windows" ]; then choco install pip           ; fi
+        - if [ "$TRAVIS_OS_NAME" == "windows" ]; pip3.exe install --user conan    ; fi
         - pip install --user conan
         - conan remote add inexorgame "https://api.bintray.com/conan/inexorgame/inexor-conan"
         - mkdir build && cd build
