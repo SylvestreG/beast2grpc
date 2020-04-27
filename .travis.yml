@@ -1,19 +1,18 @@
 language: cpp
 
 os:
-        - linux
-        - macos
+        # - linux
+        #- macos
         - windows
 
 compiler:
-        - gcc
-        - clang
+        #        - gcc
+        #- clang
         - Visual Studio
 
        
 script:
-        - if [ "$TRAVIS_OS_NAME" == "windows" ]; then choco install python        ; fi
-        - python -m pip install --user conan
+        - if [ "$TRAVIS_OS_NAME" == "windows" ]; then choco install conan        ; fi
         - conan remote add inexorgame "https://api.bintray.com/conan/inexorgame/inexor-conan"
         - mkdir build && cd build
         - conan install .. --build missing && cmake .. && cmake --build .
