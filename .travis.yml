@@ -6,9 +6,9 @@ os:
         - windows
 
 compiler:
-        gcc
-        clang
-        Visual Studio
+        - gcc
+        - clang
+        - Visual Studio
 
        
 script:
