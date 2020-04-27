@@ -10,6 +10,21 @@ else()
     message(WARNING "The file conanbuildinfo.cmake doesn't exist, you have to run conan install first")
 endif()
 
+if (WIN32)
+    macro(get_WIN32_WINNT version)
+        if (WIN32 AND CMAKE_SYSTEM_VERSION)
+            set(ver ${CMAKE_SYSTEM_VERSION})
+            string(REPLACE "." "" ver ${ver})
+            string(REGEX REPLACE "([0-9])" "0\\1" ver ${ver})
+
+            set(${version} "0x${ver}")
+        endif()
+    endmacro()
+
+    get_WIN32_WINNT(ver)
+    add_definitions(-D_WIN32_WINNT=${ver})
+endif (WIN32)
+
 find_package(protoc CONFIG)
 find_package(protobuf CONFIG)
 find_package(gRPC CONFIG REQUIRED)
