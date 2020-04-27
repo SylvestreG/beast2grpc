@@ -12,7 +12,7 @@ compiler:
 
        
 script:
-        - pip install conan
+        - pip install --user conan
         - conan remote add inexorgame "https://api.bintray.com/conan/inexorgame/inexor-conan"
         - mkdir build && cd build
         - conan install .. && cmake .. && cmake --build .
