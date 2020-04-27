@@ -1,0 +1,25 @@
+language: cpp
+
+os:
+        - linux
+        - macos
+        - windows
+
+compiler:
+        gcc
+        clang
+        Visual Studio
+
+       
+script:
+        - pip install conan
+        - conan remote add inexorgame "https://api.bintray.com/conan/inexorgame/inexor-conan"
+        - mkdir build && cd build
+        - conan install .. && cmake .. && cmake --build .
+
+notifications:
+        email:
+                recipients:
+                        - ccna.syl@gmail.com
+                on_success: change
+                on_failure: change                     
