@@ -15,7 +15,7 @@ script:
         - pip install --user conan
         - conan remote add inexorgame "https://api.bintray.com/conan/inexorgame/inexor-conan"
         - mkdir build && cd build
-        - conan install .. && cmake .. && cmake --build .
+        - conan install .. --build missing && cmake .. && cmake --build .
 
 notifications:
         email:
