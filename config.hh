@@ -25,25 +25,24 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "grpc_wrapper.hh"
-#include "http/http_listener.hh"
-#include <boost/asio.hpp>
+#ifndef BEAST2GRPC__CONFIG_HH_
+#define BEAST2GRPC__CONFIG_HH_
+
 #include <spdlog/spdlog.h>
-#include <spdlog/fmt/ostr.h>
+#include <filesystem>
 
-namespace net = boost::asio;
+class config {
+ private:
+  std::string _bind_addr;
+  std::string _connect_addr;
+  spdlog::level::level_enum _log_level;
 
-int main() {
-  net::io_context ioc;
-  auto addr = net::ip::make_address("0.0.0.0");
-  uint16_t port(4242);
+ public:
+  config() = delete;
+  config(config const&) = delete;
+  config& operator=(config const&) = delete;
 
-  spdlog::set_level(spdlog::level::debug);
-  spdlog::info("beast {}:{} => to grpc => {}", addr, port, "127.0.0.1:3000");
-  grpc_wrapper wrap("127.0.0.1:3000");
-  std::make_shared<http_listener>(ioc, tcp::endpoint{addr, port}, wrap)->run();
+  config(std::filesystem::path &path);
+};
 
-  ioc.run();
-
-  return (EXIT_SUCCESS);
-}
+#endif  // BEAST2GRPC__CONFIG_HH_
