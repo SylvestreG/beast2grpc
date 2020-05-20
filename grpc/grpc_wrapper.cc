@@ -37,6 +37,12 @@ grpc_wrapper::grpc_wrapper(const std::string &str) {
   std::vector<std::string> svc_list;
   _db->GetServices(&svc_list);
 
+  if (svc_list.empty()) {
+    spdlog::warn("Cannot find grpc services.");
+    spdlog::warn("This is probably due to a configuration error.");
+    spdlog::warn("Check if your grpc server ({}) is running", str);
+  }
+
   for (auto &s : svc_list) {
     spdlog::debug("registring {}", s);
     _services.push_back(

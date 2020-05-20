@@ -34,6 +34,7 @@
 class config {
  private:
   std::string _bind_addr;
+  std::uint16_t _bind_port;
   std::string _connect_addr;
   spdlog::level::level_enum _log_level;
 
@@ -43,6 +44,10 @@ class config {
   config& operator=(config const&) = delete;
 
   config(std::filesystem::path &path);
+
+  std::string const& get_bind_addr();
+  std::uint16_t get_bind_port();
+  std::string const& get_connect_addr();
 };
 
 #endif  // BEAST2GRPC__CONFIG_HH_

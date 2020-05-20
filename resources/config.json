@@ -2,6 +2,6 @@
   "address" : "0.0.0.0",
   "port" : 4242,
   "grpc_address" : "127.0.0.1",
-  "grpc_port" : "3000",
+  "grpc_port" : 3000,
   "log_level" : "info"
 }

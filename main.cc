@@ -30,17 +30,27 @@
 #include <boost/asio.hpp>
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
+#include "config.hh"
 
 namespace net = boost::asio;
 
-int main() {
-  net::io_context ioc;
-  auto addr = net::ip::make_address("0.0.0.0");
-  uint16_t port(4242);
+int main(int ac, char **av) {
 
-  spdlog::set_level(spdlog::level::debug);
-  spdlog::info("beast {}:{} => to grpc => {}", addr, port, "127.0.0.1:3000");
-  grpc_wrapper wrap("127.0.0.1:3000");
+  if (ac != 2) {
+    spdlog::error("usage: ./beast2grpc config_file");
+    return (EXIT_FAILURE);
+  }
+
+  std::filesystem::path p(av[1]);
+
+  config cfg(p);
+
+  net::io_context ioc;
+  auto addr = net::ip::make_address(cfg.get_bind_addr());
+  uint16_t port(cfg.get_bind_port());
+
+  spdlog::info("beast {}:{} => to grpc => {}", cfg.get_bind_addr(), cfg.get_bind_port(), cfg.get_connect_addr());
+  grpc_wrapper wrap(cfg.get_connect_addr());
   std::make_shared<http_listener>(ioc, tcp::endpoint{addr, port}, wrap)->run();
 
   ioc.run();

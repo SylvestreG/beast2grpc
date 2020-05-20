@@ -29,21 +29,67 @@
  */
 #include "config.hh"
 #include <fstream>
+#include <functional>
+#include <variant>
 #include <nlohmann/json.hpp>
+#include <any>
+#include <typeinfo> 
 
 using namespace nlohmann;
+using namespace std;
 
 config::config(std::filesystem::path& path) : _log_level(spdlog::level::info) {
-  std::ifstream ifs("test.json");
-  json jf = json::parse(ifs);
+  _log_level = spdlog::level::info;
 
-  std::vector<std::string> keys{"address", "port", "grpc_address", "grpc_port"};
+  _bind_addr = "127.0.0.1";
+  _bind_port = 80;
 
-  for (auto& k : keys) {
-    if (!jf.contains(k)) {
-      spdlog::error("The Json configuration file must include a field {}", k);
-      throw std::invalid_argument("bad config");
+  string addr_grpc("localhost");
+  uint16_t port_grpc = 3000;
+
+  try {
+    ifstream ifs(path);
+    auto jf = json::parse(ifs);
+
+    vector<tuple<string, 
+                 const char *,
+                 function<bool(const json &)>,
+                 function<void(const json &, std::string const&)>>> keys {
+      {"address", "string", &json::is_string, [&](const json &js, std::string const key) {_bind_addr = js[key];}}, 
+      {"port", "integer", &json::is_number_unsigned, [&](const json &js, std::string const key) {_bind_port = js[key];}}, 
+      {"grpc_address", "string", &json::is_string, [&addr_grpc](const json &js, std::string const key) {addr_grpc = js[key];}}, 
+      {"grpc_port", "integer", &json::is_number_unsigned, [&port_grpc](const json &js, std::string const key) {port_grpc = js[key];}}, 
+    };
+
+    for (auto& k : keys) {
+      if (!jf.contains(std::get<0>(k))) {
+        spdlog::warn("The Json field {} is missing using default config for this field", std::get<0>(k));
+        continue;
+      }
+      else if (!std::get<2>(k)(jf[std::get<0>(k)])) {
+        spdlog::warn("The Json field {} type is bad (need to use {}) using default config for this field", std::get<0>(k), std::get<1>(k));
+        continue;
+      }
+
+      std::get<3>(k)(jf, std::get<0>(k));
     }
+  } catch (json::exception const& je) {
+    spdlog::warn("Bad config file for {}", path.string());
+    spdlog::warn("json parse err => {}", je.what());
+    spdlog::warn("using default config");
   }
 
+  _connect_addr = fmt::format("{}:{}", addr_grpc, port_grpc);
+}
+
+std::string const& config::get_bind_addr() {
+  return _bind_addr;
+}
+
+std::string const& config::get_connect_addr() {
+  return _connect_addr;
+}
+
+std::uint16_t config::get_bind_port() {
+  return _bind_port;
 }
