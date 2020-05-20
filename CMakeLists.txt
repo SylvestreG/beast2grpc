@@ -25,14 +25,13 @@ if (WIN32)
     add_definitions(-D_WIN32_WINNT=${ver})
 endif (WIN32)
 
-find_package(protoc CONFIG)
-find_package(protobuf CONFIG)
+set(protobuf_MODULE_COMPATIBLE TRUE)
 find_package(gRPC CONFIG REQUIRED)
 
 include_directories(${CMAKE_BINARY_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/grpc)
+include_directories(${CMAKE_SOURCE_DIR}/src)
 
-get_filename_component(hw_proto "grpc/reflection.proto" ABSOLUTE)
+get_filename_component(hw_proto "${CMAKE_SOURCE_DIR}/src/grpc/reflection.proto" ABSOLUTE)
 get_filename_component(hw_proto_path "${hw_proto}" PATH)
 
 set(hw_proto_srcs "${CMAKE_BINARY_DIR}/reflection.pb.cc")
@@ -50,17 +49,17 @@ add_custom_command(
   "${hw_proto}"
   DEPENDS "${hw_proto}")
 
-add_executable(beast2grpc   ${CMAKE_SOURCE_DIR}/config.cc
-                            ${CMAKE_SOURCE_DIR}/main.cc
-                            ${CMAKE_SOURCE_DIR}/http/http_listener.cc
-                            ${CMAKE_SOURCE_DIR}/http/http_session.cc
-                            ${CMAKE_SOURCE_DIR}/grpc/call_rpc.cc
-                            ${CMAKE_SOURCE_DIR}/grpc/grpc_fn.cc
-                            ${CMAKE_SOURCE_DIR}/grpc/grpc_service.cc
-                            ${CMAKE_SOURCE_DIR}/grpc/grpc_wrapper.cc
-                            ${CMAKE_SOURCE_DIR}/grpc/proto_reflection_descriptor_database.cc
+add_executable(beast2grpc   ${CMAKE_SOURCE_DIR}/src/config.cc
+                            ${CMAKE_SOURCE_DIR}/src/main.cc
+                            ${CMAKE_SOURCE_DIR}/src/http/http_listener.cc
+                            ${CMAKE_SOURCE_DIR}/src/http/http_session.cc
+                            ${CMAKE_SOURCE_DIR}/src/grpc/call_rpc.cc
+                            ${CMAKE_SOURCE_DIR}/src/grpc/grpc_fn.cc
+                            ${CMAKE_SOURCE_DIR}/src/grpc/grpc_service.cc
+                            ${CMAKE_SOURCE_DIR}/src/grpc/grpc_wrapper.cc
+                            ${CMAKE_SOURCE_DIR}/src/grpc/proto_reflection_descriptor_database.cc
                             ${hw_proto_srcs}
                             ${hw_grpc_srcs})
 target_link_libraries(beast2grpc CONAN_PKG::spdlog CONAN_PKG::protobuf CONAN_PKG::grpc CONAN_PKG::boost CONAN_PKG::lyra CONAN_PKG::nlohmann_json)
 
-add_subdirectory(test)
+add_subdirectory(tests)

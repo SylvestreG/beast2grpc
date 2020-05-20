@@ -29,7 +29,7 @@
 #define BEAST2GRPC_HTTP_HTTPLISTENER_HH_
 
 #include <boost/asio.hpp>
-#include "grpc_wrapper.hh"
+#include "grpc/grpc_wrapper.hh"
 
 namespace net = boost::asio;
 using tcp = net::ip::tcp;

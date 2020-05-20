@@ -31,7 +31,7 @@
 #include <spdlog/spdlog.h>
 #include <boost/asio.hpp>
 #include "config.hh"
-#include "grpc_wrapper.hh"
+#include "grpc/grpc_wrapper.hh"
 #include "http/http_listener.hh"
 
 namespace net = boost::asio;
