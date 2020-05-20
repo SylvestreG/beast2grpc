@@ -2,22 +2,19 @@ language:
         - python
         - c++
 os:
-        # - linux
-        #- macos
-        - windows
+        - linux
+        - macos
 
 compiler:
-        #        - gcc
-        #- clang
-        - Visual Studio
+        - gcc
+        - clang
 
 install:
-        # Install conan
         - pip install conan
         - conan user
+        - conan remote add inexorgame "https://api.bintray.com/conan/inexorgame/inexor-conan"
 
 script:
-        - conan remote add inexorgame "https://api.bintray.com/conan/inexorgame/inexor-conan"
         - mkdir build && cd build
         - conan install .. --build missing && cmake .. && cmake --build .
 
