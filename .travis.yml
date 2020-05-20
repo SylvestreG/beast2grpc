@@ -12,6 +12,7 @@ compiler:
 install:
         - pip install conan
         - conan user
+        - conan profile update settings.compiler.libcxx=libstdc++11 default
         - conan remote add inexorgame "https://api.bintray.com/conan/inexorgame/inexor-conan"
 
 script:
